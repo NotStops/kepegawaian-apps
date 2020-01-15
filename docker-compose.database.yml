@@ -1,0 +1,31 @@
+version: '3.6'
+
+services:
+  nats:
+    image : nats
+    networks:
+      - nats
+    restart: "always"
+
+  mongo:
+    image : mongo:latest
+    networks:
+      - mongo
+    volumes:
+      - ./data/mongodb_data:/data/db
+
+  redis:
+    image : redis:latest
+    networks:
+      - redis
+
+networks:
+  nats:
+    external:
+      name: gateway
+  mongo:
+    external:
+      name: gateway
+  redis:
+    external:
+      name: gateway
