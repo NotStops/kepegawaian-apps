@@ -7,33 +7,9 @@ apiEndpoints:
     paths: /token/*
     methods: ["POST","OPTIONS"]
 
-  user:
-    host: '*'
-    paths: /user/*
-    methods: ["GET", "POST", "PUT", "OPTIONS"]
-
-  books:
-    host: '*'
-    paths: /books/*
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-
-  searcindex:
-    host: '*'
-    paths: /search/*
-    methods: ["GET", "OPTIONS"]
-
 serviceEndpoints:
   authentication:
     url: '${AUTHENTICATION_SERVICE_URI}/o'
-
-  user:
-    url: '${USER_MANAGEMENT_SERVICE_URI}/api/v1'
-
-  books:
-    url: '${BOOKS_MANAGEMENT_SERVICE_URI}/api/v1'
-
-  searcindex:
-    url: '${SEARCH_INDEX_SERVICE_URI}/api/v1'
 
 policies:
   - cors
@@ -52,49 +28,15 @@ pipelines:
               serviceEndpoint: authentication
               changeOrigin: true
 
-  user:
-    apiEndpoints:
-      - user
-    policies:
-      - oauth2:
-          action:
-            jwt:
-              # issuer: express-gateway
-              # audience: something
-              # subject: test
-              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-              checkCredentialExistence: false
-      # - jwt:
-      #   - action:
-      #       secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-      #       checkCredentialExistence: false
-      - proxy:
-          - action:
-              serviceEndpoint: user
-              changeOrigin: true
-
-  books:
-    apiEndpoints:
-      - books
-    policies:
-      - jwt:
-        - action:
-            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-            checkCredentialExistence: false
-      - proxy:
-          - action:
-              serviceEndpoint: books
-              changeOrigin: true
-
-  searcindex:
-    apiEndpoints:
-      - searcindex
-    policies:
-      - jwt:
-        - action:
-            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-            checkCredentialExistence: false
-      - proxy:
-          - action:
-              serviceEndpoint: searcindex
-              changeOrigin: true
+  # user:
+  #   apiEndpoints:
+  #     - user
+  #   policies:
+  #     - jwt:
+  #       - action:
+  #           secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+  #           checkCredentialExistence: false
+  #     - proxy:
+  #         - action:
+  #             serviceEndpoint: books
+  #             changeOrigin: true

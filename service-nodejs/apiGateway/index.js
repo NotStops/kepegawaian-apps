@@ -14,6 +14,7 @@ const gateway = require('express-gateway');
 const Raven = require('raven')
 
 const env = process.env.NODE_ENV
+
 try {
   switch(env) {
     case 'undefined':
@@ -21,7 +22,7 @@ try {
       break
     case 'development':
       require('dotenv').config({
-        path: path.resolve(process.cwd(), '../.env'),
+        path: path.resolve(process.cwd(), '../../.env'),
       })
       break
     default:
@@ -31,7 +32,6 @@ try {
   Error('Error trying to run file')
 }
 
-console.log(process.env.SEARCH_INDEX_SERVICE_URI)
 Raven.config(process.env.SENTRY_DSN).install();
 
 gateway()

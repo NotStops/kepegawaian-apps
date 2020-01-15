@@ -14,7 +14,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 
-dotenv_path = join(dirname(__file__), '.env')
+dotenv_path = join(dirname(__file__), '../../../.env')
 load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,11 +24,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vf7e4zmsolr6ls%drlvi(19l*e6-%4(w&8os#_n^w@@$&!&k=c'
-TOKEN_KEY = 'w&8os#_n^w@@$&!&k=c)vf7e4zmsolr6ls%drlvi(19l*e6-%4'
+# SECRET_KEY = 'vf7e4zmsolr6ls%drlvi(19l*e6-%4(w&8os#_n^w@@$&!&k=c'
+# TOKEN_KEY = 'w&8os#_n^w@@$&!&k=c)vf7e4zmsolr6ls%drlvi(19l*e6-%4'
 
-# DATABASE_HOST = os.environ.get("DATABASE_HOST")
-# DATABASE_PORT = os.environ.get("DATABASE_PORT")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+TOKEN_KEY = os.environ.get("TOKEN_KEY")
+
+DATABASE_HOST = os.environ.get("POSTGRESQL_HOST")
+DATABASE_PORT = os.environ.get("POSTGRESQL_PORT")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,9 +97,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'authserver',
         'USER': 'authserver',
-        'PASSWORD': ')O(I*U&Y^T',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PASSWORD': 'plokijuh',
+        'HOST': DATABASE_HOST,
+        'PORT': DATABASE_PORT,
     }
 }
 

@@ -38,7 +38,7 @@ class AESCipher:
 from Crypto.Cipher import AES
 import base64
 
-MASTER_KEY="Some-long-base-key-to-use-as-encryption-key"
+MASTER_KEY="vf7e4zmsolr6ls%drlvi(19l*e6-%4(w&8os#_n^w@@$&!&k=c"
 
 def encrypt_val(clear_text):
     enc_secret = AES.new(MASTER_KEY[:16])
