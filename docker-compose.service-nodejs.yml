@@ -20,8 +20,8 @@ services:
       SENTRY_DSN: "https://9e6969ce6e2e4983822bb4d628e47a35@sentry.io/1784511"
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      JWT_SECRET_KEY: JWT_SECRET_KEY
-      AUTHENTICATION_SERVICE_URI: "http://authserver:8000"
+      SECRET_KEY: 'vf7e4zmsolr6ls%drlvi(19l*e6-%4'
+      AUTHENTICATION_SERVICE_URI: "http://authserver"
 
 
 networks:

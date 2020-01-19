@@ -4,9 +4,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
 from django.db.models import Q
 from .models import Account
-from rest_framework_jwt.settings import api_settings
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+from .utils import create_token
 
 class AccountSerializer(serializers.ModelSerializer):
     nama_lengkap = serializers.SerializerMethodField('get_nama_lengkap_')
@@ -25,35 +23,32 @@ class AccountSerializer(serializers.ModelSerializer):
 class AccountLoginSerializer(serializers.HyperlinkedModelSerializer):
     user_obj = None
     token = serializers.CharField(allow_blank=True,read_only=True)
-    # ishout = serializers.CharField(allow_blank=True,read_only=True)
-    email = serializers.CharField()
+    username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'})
 
     class Meta:
         model = Account
-        fields = ('email','password','token')
-        extra_kwargs = {'password': 
+        fields = ('username','password','token')
+        extra_kwargs = {'password':
                             {'write_only': True},
                             }
 
     def validate(self, data):
-        email = data.get("email", None)
+        username = data.get("username", None)
         password = data["password"]
         request = self.context.get('request')
-        if not email:
-            raise ValidationError("Alamat email harus di isi")
+        if not username:
+            raise ValidationError("Usernam/Email harus di isi")
 
-        user = Account.objects.filter(Q(email=email)).distinct()
+        user = Account.objects.filter(Q(username=username)|Q(email=username)).distinct()
         if user.exists() and user.count() == 1:
             user_obj = user.first()
         else:
-            raise ValidationError("Alamat email yang anda masukkan tidak terdaftar")
+            raise ValidationError("Usernam/Email yang anda masukkan tidak terdaftar")
         if user_obj:
             if not user_obj.check_password(password):
                 raise ValidationError("Password yang anda masukkan salah")
-            payload = jwt_payload_handler(user_obj)
-            token = jwt_encode_handler(payload)
-
+            token = create_token(user_obj)
 
         data["token"] = token
         return data

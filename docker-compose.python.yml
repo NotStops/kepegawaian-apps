@@ -7,14 +7,14 @@ services:
     networks:
       - authserver
     environment:
-      SECRET_KEY: ''
-      TOKEN_KEY: ''
+      SECRET_KEY: 'vf7e4zmsolr6ls%drlvi(19l*e6-%4'
+      TOKEN_KEY: '%drlvi(19l*e6-%4'
       CLIENT_ID: ''
       CLIENT_SECRET: ''
-      POSTGRESQL_HOST: ''
-      POSTGRESQL_PORT: ''
-      REDIS_HOST: ''
-      REDIS_PORT: ''
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      # REDIS_HOST: ''
+      # REDIS_PORT: ''
 
 networks:
   authserver:

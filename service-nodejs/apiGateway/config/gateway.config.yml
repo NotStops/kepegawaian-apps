@@ -4,12 +4,20 @@ http:
 apiEndpoints:
   authentication:
     host: '*'
-    paths: /token/*
+    paths: /user-login/*
     methods: ["POST","OPTIONS"]
+
+  userlist:
+    host: '*'
+    paths: /user-list/*
+    methods: ["GET","OPTIONS"]
 
 serviceEndpoints:
   authentication:
-    url: '${AUTHENTICATION_SERVICE_URI}/o'
+    url: '${AUTHENTICATION_SERVICE_URI}/auth/'
+
+  userlist:
+    url: '${AUTHENTICATION_SERVICE_URI}/api/'
 
 policies:
   - cors
@@ -28,15 +36,15 @@ pipelines:
               serviceEndpoint: authentication
               changeOrigin: true
 
-  # user:
-  #   apiEndpoints:
-  #     - user
-  #   policies:
-  #     - jwt:
-  #       - action:
-  #           secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-  #           checkCredentialExistence: false
-  #     - proxy:
-  #         - action:
-  #             serviceEndpoint: books
-  #             changeOrigin: true
+  userlist:
+    apiEndpoints:
+      - userlist
+    policies:
+      - jwt:
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: userlist
+              changeOrigin: true

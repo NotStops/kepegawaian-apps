@@ -11,10 +11,16 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from os.path import join, dirname
+from os.path import join, dirname, exists
 from dotenv import load_dotenv
+from datetime import timedelta
 
-dotenv_path = join(dirname(__file__), '../../../.env')
+dotenv_path = ''
+if exists(join(dirname(__file__), '../../../.env')):
+    dotenv_path = join(dirname(__file__), '../../../.env')
+else:
+    dotenv_path = join(dirname(__file__), '../.env')
+
 load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,9 +30,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'vf7e4zmsolr6ls%drlvi(19l*e6-%4(w&8os#_n^w@@$&!&k=c'
-# TOKEN_KEY = 'w&8os#_n^w@@$&!&k=c)vf7e4zmsolr6ls%drlvi(19l*e6-%4'
-
 SECRET_KEY = os.environ.get("SECRET_KEY")
 TOKEN_KEY = os.environ.get("TOKEN_KEY")
 
@@ -52,6 +55,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'social_django',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_social_oauth2',
     'master',
     'accounts'
@@ -131,10 +135,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication'
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
     ),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGINATE_BY': 10,
@@ -147,16 +153,21 @@ REST_FRAMEWORK = {
     ),
 }
 
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=14420)
+    # 'JWT_ALGORITHM': 'HS256'
+}
 
 AUTHENTICATION_BACKENDS = (
-    # 'accounts.authentication.EmailOrUsernameModelBackend',
+    'accounts.authentication.EmailOrUsernameModelBackend',
     'social_core.backends.google.GoogleOAuth2',  # for Google authentication
     'oauth2_provider.backends.OAuth2Backend',
     'accounts.authentication.EmailAuthBackend'
     # 'django.contrib.auth.backends.ModelBackend',
 )
 
-# AUTHENTICATION_BACKENDS = ['accounts.authentication.EmailAuthBackend']
+AUTHENTICATION_BACKENDS = ['accounts.authentication.EmailAuthBackend']
 # GOOGLE
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get(

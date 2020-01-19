@@ -12,12 +12,13 @@ from rest_framework.response import Response
 from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from .utils import get_client_ip
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     # pagination_class = LargeResultsSetPagination
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'head']
 
     def get_queryset(self):
@@ -45,13 +46,14 @@ class AccountLogin(APIView):
     serializer_class = AccountLoginSerializer
 
     def post(self, request, *args, **kwargs):
-        # headers = {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Content-Type, Authorization','Access-Control-Allow-Methods':"GET, PUT, POST, PATCH"}
         data = request.data
         serializer = AccountLoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
+            ip = get_client_ip(request)
             new_data = {
                             'auth_token': serializer.data["token"],
                             'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
+                            'ip' : ip
                         }
             # if has_permission is not None:
             #      return Response("akun sudah digunakan", status=HTTP_400_BAD_REQUEST)
