@@ -23,14 +23,14 @@ stop-service-database:
 	@$(compose-service-database) stop
 
 # ==================================== SERVICE NODEJS ======================================================
-compose-service-nodejs=docker-compose -f docker-compose.service-nodejs.yml -p service_nodejs
+compose-service-nodejs=docker-compose -f docker-compose.nodejs.yml -p service_nodejs
 start-service-nodejs:
 	@$(compose-service-nodejs) up -d
 stop-service-nodejs:
 	@$(compose-service-nodejs) stop
 
 # ==================================== SERVICE PYTHON ======================================================
-compose-service-python=docker-compose -f docker-compose.service-python.yml -p service_python
+compose-service-python=docker-compose -f docker-compose.python.yml -p service_python
 start-service-python:
 	@$(compose-service-python) up -d
 stop-service-python:

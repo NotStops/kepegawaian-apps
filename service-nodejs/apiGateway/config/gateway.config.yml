@@ -61,10 +61,10 @@ pipelines:
     apiEndpoints:
       - helloworld
     policies:
-      - jwt:
-        - action:
-            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-            checkCredentialExistence: false
+      # - jwt:
+      #   - action:
+      #       secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+      #       checkCredentialExistence: false
       - proxy:
           - action:
               serviceEndpoint: helloworld
