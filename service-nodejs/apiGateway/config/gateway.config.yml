@@ -12,12 +12,20 @@ apiEndpoints:
     paths: /user-list/*
     methods: ["GET","OPTIONS"]
 
+  helloworld:
+    host: '*'
+    paths: /hello/*
+    methods: ["GET","OPTIONS"]
+
 serviceEndpoints:
   authentication:
     url: '${AUTHENTICATION_SERVICE_URI}/auth/'
 
   userlist:
     url: '${AUTHENTICATION_SERVICE_URI}/api/'
+
+  helloworld:
+    url: '${HELLOWORLD_SERVICE_URI}/hello-world/'
 
 policies:
   - cors
@@ -47,4 +55,17 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: userlist
+              changeOrigin: true
+
+  helloworld:
+    apiEndpoints:
+      - helloworld
+    policies:
+      - jwt:
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: helloworld
               changeOrigin: true

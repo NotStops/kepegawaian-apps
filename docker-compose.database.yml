@@ -9,14 +9,14 @@ services:
   #   ports:
   #     - 4222:4222
 
-  # mongo:
-  #   image : mongo:latest
-  #   networks:
-  #     - mongo
-  #   volumes:
-  #     - ./data/mongodb_data:/data/db
-  #   ports:
-  #     - 27017:27017
+  mongo:
+    image : mongo:latest
+    networks:
+      - mongo
+    volumes:
+      - ./data/mongodb_data:/data/db
+    ports:
+      - 27017:27017
 
   postgres:
     image : postgres:12-alpine
@@ -38,9 +38,9 @@ networks:
   # nats:
   #   external:
   #     name: gateway
-  # mongo:
-  #   external:
-  #     name: gateway
+  mongo:
+    external:
+      name: gateway
   postgres:
     external:
       name: gateway
